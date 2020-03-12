@@ -1,0 +1,97 @@
+Mark table
+Model table
+producer table
+type table
+
+
+create table storage.mark(
+    id serial primary key not null,
+    image text,
+    mark text not null
+    );
+create table storage.model(
+    id serial primary key not null,
+    model text not null,
+    ex_mark integer references storage.mark
+);
+
+create table storage.type(
+    id serial primary key not null,
+    type text not null
+);
+
+create table storage.producer(
+    id serial primary key not null,
+    producer text not null
+);
+
+create table storage.products(
+    id serial primary key not null,
+    name text not null,
+    title text not null,
+    price_in numeric(8,4),
+    price_out numeric(8,4),
+    second_amount numeric(8,3),
+    amount integer,
+    spec_amount integer,
+    capacity numeric(5,3) default 0,
+    density numeric (5,3) default 0,
+    spec_id integer,
+    ex_type integer references storage.type,
+    ex_producer integer references storage.producer
+);
+
+create table storage.customer(
+    id serial primary key not null,
+    name text not null,
+    requisites text,
+    additionally text
+);
+
+create table storage.paint(
+    id serial primary key not null,
+    color_code text not null,
+    color_name text,
+    formula JSON not null,
+    mark text,
+    color_group text,
+    test_name text,
+    description text
+);
+
+create table storage.car(
+  id serial primary key not null,
+  mark text not null not null,
+  model text not null,
+  vin text,
+  number text,
+  color_code text not null,
+  description text
+);
+
+create table storage.price_list(
+    id serial primary key not null,
+    percent_increase numeric(8,4) default 0,
+    ex_customer integer references storage.customer,
+    ex_products integer references storage.products,
+    date_start date not null default CURRENT_DATE
+);
+
+create table storage.selling(
+    id serial primary key not null,
+    ex_customer integer references storage.customer,
+    sell_date date not null,
+    sell_list JSON not null,
+    sell_price numeric(8,4) not null,
+    paid numeric(8,4)
+);
+
+create table storage.selling_paint(
+    id serial primary key not null,
+    ex_customer integer references storage.customer,
+    ex_car integer references storage.car,
+    sell_date date not null,
+    sell_list JSON not null,
+    sell_price numeric(8,4) not null,
+    paid numeric(8,4)
+);
